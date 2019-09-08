@@ -3,7 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const SitePdf = require('site-pdf');
 const fs = require('fs');
-const uriel = require('url')
+const uriel = require('url');
 const path = require('path');
 const util = require('util');
 const n = require('nonce')();
@@ -27,17 +27,14 @@ routes.post('/toPdf', (req, res) => {
     paperSize: {
       format: 'A4',
       orientation: 'portrait',
-      margin: {
-        left: '0.5cm', right: '0.5cm', top: '0.5cm', bottom: '0.5cm',
-      },
     },
   });
-
   pdf
     .create(href, `${filePath}`).then(() => {
+      const fileUrl = uriel.pathToFileURL(filePath).href;
       readFile(`${filePath}`)
         .then((pdfData) => {
-          res.status(201).json({ filePath: uriel(filePath), pdfData });
+          res.status(201).json({ fileUrl });
         })
         .catch((err) => res.status(400).json(err));
     })
