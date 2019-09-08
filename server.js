@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const SitePdf = require('site-pdf');
 const fs = require('fs');
+const uriel = require('url')
 const path = require('path');
 const util = require('util');
 const n = require('nonce')();
@@ -36,7 +37,7 @@ routes.post('/toPdf', (req, res) => {
     .create(href, `${filePath}`).then(() => {
       readFile(`${filePath}`)
         .then((pdfData) => {
-          res.status(201).json({ filePath, pdfData });
+          res.status(201).json({ filePath: uriel(filePath), pdfData });
         })
         .catch((err) => res.status(400).json(err));
     })
